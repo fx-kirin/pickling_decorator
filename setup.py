@@ -27,7 +27,7 @@ def get_requires():
 
 setup(
     name="pickling_decorator",
-    version="0.1.0",
+    version="0.2.0",
     url="https://github.com/fx-kirin/pickling_decorator",
     license='MIT',
 

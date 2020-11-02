@@ -20,6 +20,13 @@ class TestClass:
     def foo(self):
         print("something")
 
+    @pickling_decorator.pickling()
+    @classmethod
+    def foofoo(cls):
+        print("something")
+
+
+@pickling_decorator.pickling()
 def mmm():
     pass
 
