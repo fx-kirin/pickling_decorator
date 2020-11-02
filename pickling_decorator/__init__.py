@@ -52,17 +52,20 @@ def pickling(save_input=True, save_output=True, save_directory="/tmp/pickling_de
                 now = datetime.datetime.now()
                 nowstr = now.strftime('%Y-%m-%d_%H-%M-%S.%f')
                 if len(args) > 0:
-                    if getattr(args[0], func.__name__, False):
-                        if save_input:
-                            input_path = save_directory / f"input-{func.__qualname__}-{nowstr}.pickle"
-                            input_path.write_bytes(pickle.dumps((args[1:], kwargs)))
-                            logger.debug(f"Wrote input {input_path}")
-                        result = func(*args, **kwargs)
-                        if save_output:
-                            output_path = save_directory / f"output-{func.__qualname__}-{nowstr}.pickle"
-                            output_path.write_bytes(pickle.dumps(result))
-                            logger.debug(f"Wrote output {output_path}")
-                        return result
+                    method = getattr(args[0], func.__name__, False)
+                    if method:
+                        wrapped = getattr(method, "__wrapped__", False)
+                        if wrapped and wrapped == func:
+                            if save_input:
+                                input_path = save_directory / f"input-{func.__qualname__}-{nowstr}.pickle"
+                                input_path.write_bytes(pickle.dumps((args[1:], kwargs)))
+                                logger.debug(f"Wrote input {input_path}")
+                            result = func(*args, **kwargs)
+                            if save_output:
+                                output_path = save_directory / f"output-{func.__qualname__}-{nowstr}.pickle"
+                                output_path.write_bytes(pickle.dumps(result))
+                                logger.debug(f"Wrote output {output_path}")
+                            return result
 
                 if save_input:
                     input_path = save_directory / f"input-{func.__qualname__}-{nowstr}.pickle"
